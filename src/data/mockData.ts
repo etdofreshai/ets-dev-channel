@@ -13,6 +13,7 @@ export interface Section {
   name: string
   directory: string
   collapsed?: boolean
+  order?: number
 }
 
 export interface Conversation {
@@ -25,6 +26,7 @@ export interface Conversation {
   typing?: boolean
   messages: Message[]
   sectionId: string
+  archived?: boolean
 }
 
 const now = Date.now()
@@ -32,9 +34,9 @@ const h = (hours: number) => now - hours * 3600000
 const m = (mins: number) => now - mins * 60000
 
 export const sections: Section[] = [
-  { id: 'workspace', name: 'Workspace', directory: '/workspace' },
-  { id: 'personal', name: 'Personal', directory: '/personal' },
-  { id: 'cicd', name: 'CI/CD', directory: '/ci' },
+  { id: 'workspace', name: 'Workspace', directory: '/workspace', order: 0 },
+  { id: 'personal', name: 'Personal', directory: '/personal', order: 1 },
+  { id: 'cicd', name: 'CI/CD', directory: '/ci', order: 2 },
 ]
 
 export const conversations: Conversation[] = [
@@ -46,6 +48,7 @@ export const conversations: Conversation[] = [
     lastTimestamp: m(3),
     online: true,
     sectionId: 'workspace',
+    archived: false,
     messages: [
       { id: '1a', text: 'Hey, the new plugin system is looking solid', sender: 'other', timestamp: h(2), type: 'text', senderName: 'Archie' },
       { id: '1b', text: 'Thanks! I refactored the loader to support lazy imports', sender: 'me', timestamp: h(1.5), type: 'text' },
@@ -62,6 +65,7 @@ export const conversations: Conversation[] = [
     lastMessage: '🎤 Voice message (0:42)',
     lastTimestamp: m(28),
     sectionId: 'workspace',
+    archived: false,
     messages: [
       { id: '2a', text: 'The SSL certs are auto-renewing now via Let\'s Encrypt', sender: 'other', timestamp: h(5), type: 'text', senderName: 'DevOps Bot' },
       { id: '2b', text: '```bash\n# Check cert status\ncertbot certificates\n\n# Force renewal\ncertbot renew --force-renewal\n```', sender: 'other', timestamp: h(4.5), type: 'code', language: 'bash', senderName: 'DevOps Bot' },
@@ -77,6 +81,7 @@ export const conversations: Conversation[] = [
     lastMessage: 'TODO: Add WebSocket support',
     lastTimestamp: h(6),
     sectionId: 'personal',
+    archived: false,
     messages: [
       { id: '3a', text: '**Project priorities this week:**\n\n1. Finish chat UI clone\n2. Add WebSocket layer\n3. Deploy to Dokploy\n4. Write API docs', sender: 'me', timestamp: h(12), type: 'text' },
       { id: '3b', text: '```json\n{\n  "api_version": "v1",\n  "endpoints": [\n    "/ws/connect",\n    "/api/messages",\n    "/api/conversations"\n  ]\n}\n```', sender: 'me', timestamp: h(10), type: 'code', language: 'json' },
@@ -91,6 +96,7 @@ export const conversations: Conversation[] = [
     lastTimestamp: h(1),
     online: true,
     sectionId: 'cicd',
+    archived: false,
     messages: [
       { id: '4a', text: '❌ Build failed — main@def5678\n\nError: Type \'string\' is not assignable to type \'number\'', sender: 'other', timestamp: h(8), type: 'text', senderName: 'CI Bot' },
       { id: '4b', text: 'Fixed the type mismatch in the message handler', sender: 'me', timestamp: h(4), type: 'text' },

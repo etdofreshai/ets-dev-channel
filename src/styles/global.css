@@ -177,6 +177,12 @@ body {
   text-overflow: ellipsis;
 }
 
+.section-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .section-add-btn {
   background: none;
   border: 1px solid var(--border);
@@ -196,6 +202,220 @@ body {
   background: var(--accent);
   color: white;
   border-color: var(--accent);
+}
+
+/* Section menu */
+.section-menu-container {
+  position: relative;
+}
+
+.section-menu-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.section-menu-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.section-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 0;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  animation: menuFadeIn 0.15s ease;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-menu-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.section-menu-dropdown button:hover {
+  background: var(--bg-hover);
+}
+
+.section-menu-delete {
+  color: #e74c3c !important;
+}
+
+.section-menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.section-delete-confirm {
+  padding: 8px 12px;
+}
+.section-delete-confirm span {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 6px;
+}
+.section-delete-confirm-btns {
+  display: flex;
+  gap: 6px;
+}
+.section-delete-confirm-btns button {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  width: auto;
+}
+.confirm-yes {
+  background: #e74c3c !important;
+  color: white !important;
+}
+.confirm-yes:hover {
+  background: #c0392b !important;
+}
+.confirm-no {
+  background: var(--bg-hover) !important;
+}
+
+/* Section rename input */
+.section-rename-input {
+  background: var(--bg-input);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  outline: none;
+  width: 120px;
+}
+
+/* Section collapse animation */
+.section-content {
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.3s ease;
+}
+.section-collapsed {
+  max-height: 0;
+}
+
+/* Archive button */
+.conv-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.conv-archive-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.conv-item:hover .conv-archive-btn {
+  opacity: 1;
+}
+.conv-archive-btn:hover {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.15);
+}
+
+/* Add workspace footer */
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding: 8px 12px;
+}
+
+.add-workspace-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+  width: 100%;
+  text-align: left;
+  transition: color 0.15s;
+}
+.add-workspace-btn:hover {
+  color: var(--text-secondary);
+}
+
+.add-workspace-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.add-workspace-form input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+}
+.add-workspace-form input:focus {
+  border-color: var(--accent);
+}
+.add-workspace-btns {
+  display: flex;
+  gap: 6px;
+}
+.add-workspace-btns button {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.add-workspace-btns button:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.add-workspace-btns button:first-child:hover {
+  background: var(--accent-hover);
 }
 
 /* Compact mode */
