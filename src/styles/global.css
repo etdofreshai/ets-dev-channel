@@ -1054,3 +1054,25 @@ body {
   text-align: center;
   user-select: none;
 }
+
+/* Sub-conversation count badge */
+.conv-child-count {
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #334155;
+  color: #94a3b8;
+}
+.conv-child-count.collapsed {
+  background: #dc2626;
+  color: #fff;
+}
+.conv-avatar { position: relative; }

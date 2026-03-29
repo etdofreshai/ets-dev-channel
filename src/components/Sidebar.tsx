@@ -263,8 +263,10 @@ export default function Sidebar({
 
                       <div className="conv-avatar">
                         {c.avatar}
-                        {hasChildren && (
-                          <span className={`conv-parent-chevron ${childrenCollapsed ? 'collapsed' : ''}`}>▼</span>
+                        {hasChildren && children.length > 0 && (
+                          <span className={`conv-child-count ${childrenCollapsed ? 'collapsed' : ''}`}>
+                            {children.length}
+                          </span>
                         )}
                       </div>
                       {isCompact ? (
