@@ -5,9 +5,9 @@ type ViewMode = 'regular' | 'compact'
 type ViewFilter = 'active' | 'archived' | 'all'
 
 const filterLabels: Record<ViewFilter, string> = {
-  active: 'Active',
-  archived: 'Archived',
-  all: 'All',
+  active: '💬',
+  archived: '📦',
+  all: '👁',
 }
 const filterCycle: Record<ViewFilter, ViewFilter> = {
   active: 'archived',
@@ -154,8 +154,7 @@ export default function Sidebar({
           title={`Showing: ${filterLabels[viewFilter]} — click to cycle`}
           onClick={() => setViewFilter(f => filterCycle[f])}
         >
-          👁
-          <span className="filter-label">{filterLabels[viewFilter]}</span>
+          {filterLabels[viewFilter]}
         </button>
       </div>
       <div className="conversation-list">
