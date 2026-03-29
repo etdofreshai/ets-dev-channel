@@ -14,6 +14,8 @@ export default function SetupWizard({ provider, onComplete }: Props) {
     if (!workspaceDir.trim()) return
     setSaving(true)
     await provider.updateSettings({ workspaceDir: workspaceDir.trim(), setupComplete: true })
+    // Create the default Workspace section
+    await provider.createSection('Workspace', workspaceDir.trim())
     onComplete()
   }
 
