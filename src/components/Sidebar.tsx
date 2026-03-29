@@ -163,7 +163,10 @@ export default function Sidebar({
         {sortedSections.map(section => {
           const sectionConvs = filtered
             .filter(c => c.sectionId === section.id)
-            .sort((a, b) => b.lastTimestamp - a.lastTimestamp)
+            .sort((a, b) => {
+              if (a.archived !== b.archived) return a.archived ? 1 : -1
+              return b.lastTimestamp - a.lastTimestamp
+            })
           if (sectionConvs.length === 0 && search) return null
           const collapsed = collapsedSections.has(section.id)
 
