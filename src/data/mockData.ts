@@ -28,6 +28,7 @@ export interface Conversation {
   sectionId: string
   archived?: boolean
   description?: string
+  parentId?: string
 }
 
 const now = Date.now()
@@ -57,6 +58,50 @@ export const conversations: Conversation[] = [
       { id: '1d', text: 'Clean. Does it handle circular deps?', sender: 'other', timestamp: h(1), type: 'text', senderName: 'Archie' },
       { id: '1e', text: 'Yeah, there\'s a dependency graph resolver that runs first. Throws if it finds cycles.', sender: 'me', timestamp: m(45), type: 'text' },
       { id: '1f', text: 'Deployed v2.4.1 — check staging', sender: 'other', timestamp: m(3), type: 'text', senderName: 'Archie' },
+    ],
+  },
+  {
+    id: '1-sub-1',
+    name: '🔧 Fix Monarch Zod',
+    avatar: '🔧',
+    lastMessage: 'Patched Zod schema — types now validate correctly',
+    lastTimestamp: m(12),
+    sectionId: 'workspace',
+    archived: false,
+    parentId: '1',
+    messages: [
+      { id: 's1a', text: 'Starting sub-agent: fix Monarch Zod validation errors in plugin loader', sender: 'other', timestamp: m(30), type: 'text', senderName: 'Archie' },
+      { id: 's1b', text: '```typescript\n// Fixed schema\nconst MonarchSchema = z.object({\n  name: z.string(),\n  version: z.string().regex(/^\\d+\\.\\d+\\.\\d+$/),\n  rules: z.array(TokenRuleSchema),\n});\n```', sender: 'other', timestamp: m(20), type: 'code', language: 'typescript', senderName: 'Archie' },
+      { id: 's1c', text: 'Patched Zod schema — types now validate correctly', sender: 'other', timestamp: m(12), type: 'text', senderName: 'Archie' },
+    ],
+  },
+  {
+    id: '1-sub-2',
+    name: '📊 Deep Analysis Report',
+    avatar: '📊',
+    lastMessage: 'Report generated — 14 findings, 2 critical',
+    lastTimestamp: m(45),
+    sectionId: 'workspace',
+    archived: false,
+    parentId: '1',
+    messages: [
+      { id: 's2a', text: 'Running deep analysis on plugin dependency graph...', sender: 'other', timestamp: h(1.5), type: 'text', senderName: 'Archie' },
+      { id: 's2b', text: 'Report generated — 14 findings, 2 critical', sender: 'other', timestamp: m(45), type: 'text', senderName: 'Archie' },
+    ],
+  },
+  {
+    id: '1-sub-3',
+    name: '🐙 Ingestor Sync Fix',
+    avatar: '🐙',
+    lastMessage: 'Sync loop patched — no more duplicate events',
+    lastTimestamp: h(2),
+    sectionId: 'workspace',
+    archived: false,
+    parentId: '1',
+    messages: [
+      { id: 's3a', text: 'Investigating duplicate event ingestion on webhook handler', sender: 'other', timestamp: h(3), type: 'text', senderName: 'Archie' },
+      { id: 's3b', text: '```diff\n- await ingest(event);\n+ if (!seen.has(event.id)) {\n+   seen.add(event.id);\n+   await ingest(event);\n+ }\n```', sender: 'other', timestamp: h(2.5), type: 'code', language: 'diff', senderName: 'Archie' },
+      { id: 's3c', text: 'Sync loop patched — no more duplicate events', sender: 'other', timestamp: h(2), type: 'text', senderName: 'Archie' },
     ],
   },
   {

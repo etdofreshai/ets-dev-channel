@@ -984,3 +984,73 @@ body {
   font-size: 0.85rem;
 }
 .modal-btns .confirm-no:hover { background: #475569; }
+
+/* Sub-conversation / Sub-agent styles */
+.conv-group {
+  display: flex;
+  flex-direction: column;
+}
+.conv-parent-row {
+  display: flex;
+  align-items: stretch;
+  cursor: pointer;
+}
+.conv-parent-row > .conv-item {
+  flex: 1;
+  min-width: 0;
+}
+.conv-children {
+  padding-left: 12px;
+  border-left: 2px solid #334155;
+  margin-left: 22px;
+}
+.conv-item.conv-sub {
+  padding-left: 4px;
+  opacity: 0.85;
+}
+.conv-item.conv-sub .conv-name {
+  font-size: 0.82rem;
+}
+.conv-item.conv-sub .conv-avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+.conv-tree-line {
+  color: #475569;
+  font-size: 0.75rem;
+  line-height: 1;
+  margin-right: 2px;
+  flex-shrink: 0;
+  align-self: center;
+  font-family: monospace;
+}
+.conv-parent-chevron {
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  font-size: 8px;
+  color: #64748b;
+  transition: transform 0.15s ease;
+}
+.conv-parent-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+.conv-avatar {
+  position: relative;
+}
+.conv-children-toggle {
+  display: none;
+}
+
+/* Sub-agent read-only input */
+.input-area-readonly {
+  justify-content: center !important;
+  padding: 0.75rem 1rem !important;
+}
+.subagent-readonly-label {
+  color: #64748b;
+  font-size: 0.85rem;
+  text-align: center;
+  user-select: none;
+}

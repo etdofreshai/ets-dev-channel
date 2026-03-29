@@ -64,23 +64,29 @@ export default function ChatArea({ conversation, onSend, onBack, onUpdateConvers
         ))}
       </div>
 
-      <div className="input-area">
-        <button className="input-btn" title="Attach file">📎</button>
-        <textarea
-          placeholder="Message..."
-          rows={1}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKey}
-          onInput={e => {
-            const t = e.currentTarget
-            t.style.height = 'auto'
-            t.style.height = Math.min(t.scrollHeight, 120) + 'px'
-          }}
-        />
-        <button className="input-btn" title="Voice message">🎤</button>
-        <button className="send-btn" onClick={handleSend} title="Send">➤</button>
-      </div>
+      {conversation.parentId ? (
+        <div className="input-area input-area-readonly">
+          <span className="subagent-readonly-label">🐙 Sub-agent session — read only</span>
+        </div>
+      ) : (
+        <div className="input-area">
+          <button className="input-btn" title="Attach file">📎</button>
+          <textarea
+            placeholder="Message..."
+            rows={1}
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKey}
+            onInput={e => {
+              const t = e.currentTarget
+              t.style.height = 'auto'
+              t.style.height = Math.min(t.scrollHeight, 120) + 'px'
+            }}
+          />
+          <button className="input-btn" title="Voice message">🎤</button>
+          <button className="send-btn" onClick={handleSend} title="Send">➤</button>
+        </div>
+      )}
 
       <ConversationInfoPanel
         conversation={conversation}

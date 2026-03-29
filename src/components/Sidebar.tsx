@@ -54,6 +54,7 @@ export default function Sidebar({
       return new Set(JSON.parse(localStorage.getItem('sidebar-collapsed') || '[]'))
     } catch { return new Set() }
   })
+  const [collapsedParents, setCollapsedParents] = useState<Set<string>>(new Set())
   const [menuOpen, setMenuOpen] = useState<string | null>(null)
   const [renamingSection, setRenamingSection] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState('')
@@ -240,38 +241,36 @@ export default function Sidebar({
                 </div>
               </div>
               <div className={`section-content ${collapsed ? 'section-collapsed' : ''}`}>
-                {sectionConvs.map(c => (
-                  <div
-                    key={c.id}
-                    className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''} ${c.archived ? 'conv-archived' : ''}`}
-                    onClick={() => onSelect(c.id)}
-                    title={c.description || undefined}
-                    style={{ order: -c.lastTimestamp }}
-                  >
-                    <div className="conv-avatar">{c.avatar}</div>
-                    {isCompact ? (
-                      <div className="conv-info compact-info">
-                        <span className="conv-name">{c.name}</span>
-                        <div className="conv-actions-row">
-                          <span className="conv-time">{formatTime(c.lastTimestamp)}</span>
-                          {c.archived ? (
-                            <button
-                              className="conv-archive-btn conv-delete-btn"
-                              title="Delete permanently"
-                              onClick={e => { e.stopPropagation(); setDeleteConvConfirm(c.id) }}
-                            >✕</button>
-                          ) : (
-                            <button
-                              className="conv-archive-btn"
-                              title="Archive"
-                              onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
-                            >📦</button>
-                          )}
-                        </div>
+                {(() => {
+                  const topLevel = sectionConvs.filter(c => !c.parentId)
+                  const childrenMap = new Map<string, Conversation[]>()
+                  sectionConvs.filter(c => c.parentId).forEach(c => {
+                    const list = childrenMap.get(c.parentId!) || []
+                    list.push(c)
+                    childrenMap.set(c.parentId!, list)
+                  })
+                  // Sort children by timestamp within each group
+                  childrenMap.forEach(list => list.sort((a, b) => b.lastTimestamp - a.lastTimestamp))
+
+                  const renderConvItem = (c: Conversation, isSub: boolean, isLastChild?: boolean, hasChildren?: boolean, childrenCollapsed?: boolean) => (
+                    <div
+                      key={c.id}
+                      className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''} ${c.archived ? 'conv-archived' : ''} ${isSub ? 'conv-sub' : ''}`}
+                      onClick={hasChildren ? undefined : () => onSelect(c.id)}
+                      title={c.description || undefined}
+                      style={{ order: -c.lastTimestamp }}
+                    >
+                      {isSub && (
+                        <span className="conv-tree-line">{isLastChild ? '└─' : '├─'}</span>
+                      )}
+                      <div className="conv-avatar">
+                        {c.avatar}
+                        {hasChildren && (
+                          <span className={`conv-parent-chevron ${childrenCollapsed ? 'collapsed' : ''}`}>▼</span>
+                        )}
                       </div>
-                    ) : (
-                      <div className="conv-info">
-                        <div className="conv-top">
+                      {isCompact ? (
+                        <div className="conv-info compact-info">
                           <span className="conv-name">{c.name}</span>
                           <div className="conv-actions-row">
                             <span className="conv-time">{formatTime(c.lastTimestamp)}</span>
@@ -290,11 +289,69 @@ export default function Sidebar({
                             )}
                           </div>
                         </div>
-                        <div className="conv-preview">{c.lastMessage}</div>
+                      ) : (
+                        <div className="conv-info">
+                          <div className="conv-top">
+                            <span className="conv-name">{c.name}</span>
+                            <div className="conv-actions-row">
+                              <span className="conv-time">{formatTime(c.lastTimestamp)}</span>
+                              {c.archived ? (
+                                <button
+                                  className="conv-archive-btn conv-delete-btn"
+                                  title="Delete permanently"
+                                  onClick={e => { e.stopPropagation(); setDeleteConvConfirm(c.id) }}
+                                >✕</button>
+                              ) : (
+                                <button
+                                  className="conv-archive-btn"
+                                  title="Archive"
+                                  onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
+                                >📦</button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="conv-preview">{c.lastMessage}</div>
+                        </div>
+                      )}
+                    </div>
+                  )
+
+                  return topLevel.map(c => {
+                    const children = childrenMap.get(c.id) || []
+                    const hasChildren = children.length > 0
+                    const parentCollapsed = collapsedParents.has(c.id)
+                    return (
+                      <div key={c.id} className="conv-group">
+                        <div className="conv-parent-row" onClick={hasChildren ? (e) => {
+                          e.stopPropagation()
+                          if (c.id === activeId) {
+                            // Already selected — just toggle children
+                            setCollapsedParents(prev => {
+                              const next = new Set(prev)
+                              next.has(c.id) ? next.delete(c.id) : next.add(c.id)
+                              return next
+                            })
+                          } else {
+                            // Select and expand
+                            onSelect(c.id)
+                            setCollapsedParents(prev => {
+                              const next = new Set(prev)
+                              next.delete(c.id)
+                              return next
+                            })
+                          }
+                        } : undefined}>
+                          {renderConvItem(c, false, undefined, hasChildren, parentCollapsed)}
+                        </div>
+                        {hasChildren && !parentCollapsed && (
+                          <div className="conv-children">
+                            {children.map((child, i) => renderConvItem(child, true, i === children.length - 1))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
+                    )
+                  })
+                })()}
               </div>
             </div>
           )
