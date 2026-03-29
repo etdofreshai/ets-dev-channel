@@ -252,7 +252,7 @@ export default function Sidebar({
                   // Sort children by timestamp within each group
                   childrenMap.forEach(list => list.sort((a, b) => b.lastTimestamp - a.lastTimestamp))
 
-                  const renderConvItem = (c: Conversation, isSub: boolean, isLastChild?: boolean, hasChildren?: boolean, childrenCollapsed?: boolean) => (
+                  const renderConvItem = (c: Conversation, isSub: boolean, isLastChild?: boolean, hasChildren?: boolean, childrenCollapsed?: boolean, childCount?: number) => (
                     <div
                       key={c.id}
                       className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''} ${c.archived ? 'conv-archived' : ''} ${isSub ? 'conv-sub' : ''}`}
@@ -263,9 +263,9 @@ export default function Sidebar({
 
                       <div className="conv-avatar">
                         {c.avatar}
-                        {hasChildren && children.length > 0 && (
+                        {hasChildren && childCount && childCount > 0 && (
                           <span className={`conv-child-count ${childrenCollapsed ? 'collapsed' : ''}`}>
-                            {children.length}
+                            {childCount}
                           </span>
                         )}
                       </div>
@@ -341,7 +341,7 @@ export default function Sidebar({
                             })
                           }
                         } : undefined}>
-                          {renderConvItem(c, false, undefined, hasChildren, parentCollapsed)}
+                          {renderConvItem(c, false, undefined, hasChildren, parentCollapsed, children.length)}
                         </div>
                         {hasChildren && !parentCollapsed && (
                           <div className="conv-children">
