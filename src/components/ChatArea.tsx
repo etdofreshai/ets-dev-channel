@@ -52,8 +52,8 @@ export default function ChatArea({ conversation, onSend, onBack, onUpdateConvers
         </div>
         <div className="chat-header-info chat-header-clickable" onClick={() => setInfoPanelOpen(true)}>
           <h2>{conversation.name}</h2>
-          <div className="chat-header-status">
-            {conversation.typing ? 'typing...' : conversation.online ? 'online' : 'last seen recently'}
+          <div className="chat-header-status" style={{ color: '#8899a6' }}>
+            {conversation.description || ''}
           </div>
         </div>
       </div>
