@@ -3,6 +3,7 @@ import { Conversation, Section } from './data/mockData'
 import { DataProvider } from './providers/DataProvider'
 import { LiveProvider } from './providers/LiveProvider'
 import { MockProvider } from './providers/MockProvider'
+import { BrowserProvider } from './providers/BrowserProvider'
 import Sidebar from './components/Sidebar'
 import ChatArea from './components/ChatArea'
 import SetupWizard from './components/SetupWizard'
@@ -10,10 +11,14 @@ import SetupWizard from './components/SetupWizard'
 export default function App() {
   const provider = useMemo<DataProvider>(() => {
     const params = new URLSearchParams(window.location.search)
-    return params.get('data') === 'mock' ? new MockProvider() : new LiveProvider()
+    const mode = params.get('data')
+    if (mode === 'mock') return new MockProvider()
+    if (mode === 'live') return new LiveProvider()
+    return new BrowserProvider()
   }, [])
 
   const isMock = provider instanceof MockProvider
+  const isLive = provider instanceof LiveProvider
 
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [sectionsList, setSectionsList] = useState<Section[]>([])
@@ -34,13 +39,15 @@ export default function App() {
   useEffect(() => {
     ;(async () => {
       try {
-        if (!isMock) {
+        if (isMock) {
+          setSetupComplete(true)
+        } else {
           const settings = await provider.getSettings()
           setSetupComplete(settings.setupComplete)
         }
         await reload()
       } catch (err: any) {
-        if (!isMock) {
+        if (isLive) {
           setBackendError(err?.message || 'Cannot connect to backend')
         }
       }
