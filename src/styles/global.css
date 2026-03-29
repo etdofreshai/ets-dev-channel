@@ -928,3 +928,59 @@ body {
 .conv-delete-btn {
   color: #e55 !important;
 }
+
+/* Confirmation Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease;
+}
+.modal-dialog {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 360px;
+  width: 90%;
+}
+.modal-dialog h3 {
+  color: #f1f5f9;
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+.modal-dialog p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+  line-height: 1.4;
+}
+.modal-btns {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.modal-btns .confirm-yes {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.modal-btns .confirm-yes:hover { background: #ef4444; }
+.modal-btns .confirm-no {
+  background: #334155;
+  color: #94a3b8;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.modal-btns .confirm-no:hover { background: #475569; }

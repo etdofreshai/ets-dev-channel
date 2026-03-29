@@ -61,6 +61,8 @@ export default function Sidebar({
   const [newWsName, setNewWsName] = useState('')
   const [newWsDir, setNewWsDir] = useState('')
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [deleteConvConfirm, setDeleteConvConfirm] = useState<string | null>(null)
+  const [deleteArchivedConfirm, setDeleteArchivedConfirm] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const renameRef = useRef<HTMLInputElement>(null)
 
@@ -212,9 +214,10 @@ export default function Sidebar({
                         <button onClick={() => moveSection(section.id, 'up')}>Move Up</button>
                         <button onClick={() => moveSection(section.id, 'down')}>Move Down</button>
                         <button onClick={() => moveSection(section.id, 'bottom')}>Move to Bottom</button>
+                        <div className="section-menu-divider" />
+                        <button className="section-menu-delete" style={{ color: '#e8a040' }} onClick={() => setDeleteArchivedConfirm(section.id)}>Delete All Archived</button>
                         {section.id !== 'workspace' && (
                           <>
-                            <div className="section-menu-divider" />
                             {deleteConfirm === section.id ? (
                               <div className="section-delete-confirm">
                                 <span>Delete section and all conversations?</span>
@@ -224,7 +227,7 @@ export default function Sidebar({
                                 </div>
                               </div>
                             ) : (
-                              <button className="section-menu-delete" onClick={() => setDeleteConfirm(section.id)}>Delete</button>
+                              <button className="section-menu-delete" onClick={() => setDeleteConfirm(section.id)}>Delete Section</button>
                             )}
                           </>
                         )}
@@ -252,7 +255,7 @@ export default function Sidebar({
                             <button
                               className="conv-archive-btn conv-delete-btn"
                               title="Delete permanently"
-                              onClick={e => { e.stopPropagation(); onDeleteConversation(c.id) }}
+                              onClick={e => { e.stopPropagation(); setDeleteConvConfirm(c.id) }}
                             >✕</button>
                           ) : (
                             <button
@@ -273,7 +276,7 @@ export default function Sidebar({
                               <button
                                 className="conv-archive-btn conv-delete-btn"
                                 title="Delete permanently"
-                                onClick={e => { e.stopPropagation(); onDeleteConversation(c.id) }}
+                                onClick={e => { e.stopPropagation(); setDeleteConvConfirm(c.id) }}
                               >✕</button>
                             ) : (
                               <button
@@ -321,6 +324,39 @@ export default function Sidebar({
           </button>
         )}
       </div>
+
+      {/* Delete conversation confirmation modal */}
+      {deleteConvConfirm && (
+        <div className="modal-overlay" onClick={() => setDeleteConvConfirm(null)}>
+          <div className="modal-dialog" onClick={e => e.stopPropagation()}>
+            <h3>Delete Conversation</h3>
+            <p>Are you sure you want to permanently delete this conversation?</p>
+            <div className="modal-btns">
+              <button className="confirm-yes" onClick={() => { onDeleteConversation(deleteConvConfirm); setDeleteConvConfirm(null) }}>Yes, delete</button>
+              <button className="confirm-no" onClick={() => setDeleteConvConfirm(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete all archived confirmation modal */}
+      {deleteArchivedConfirm && (
+        <div className="modal-overlay" onClick={() => setDeleteArchivedConfirm(null)}>
+          <div className="modal-dialog" onClick={e => e.stopPropagation()}>
+            <h3>Delete All Archived</h3>
+            <p>This will permanently delete all archived conversations in this section. Are you sure?</p>
+            <div className="modal-btns">
+              <button className="confirm-yes" onClick={() => {
+                const sectionConvs = conversations.filter(c => c.sectionId === deleteArchivedConfirm && c.archived)
+                sectionConvs.forEach(c => onDeleteConversation(c.id))
+                setDeleteArchivedConfirm(null)
+                setMenuOpen(null)
+              }}>Yes, delete all</button>
+              <button className="confirm-no" onClick={() => setDeleteArchivedConfirm(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
