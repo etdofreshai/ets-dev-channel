@@ -189,17 +189,21 @@ export default function Sidebar({
                         <button onClick={() => moveSection(section.id, 'up')}>Move Up</button>
                         <button onClick={() => moveSection(section.id, 'down')}>Move Down</button>
                         <button onClick={() => moveSection(section.id, 'bottom')}>Move to Bottom</button>
-                        <div className="section-menu-divider" />
-                        {deleteConfirm === section.id ? (
-                          <div className="section-delete-confirm">
-                            <span>Delete section and all conversations?</span>
-                            <div className="section-delete-confirm-btns">
-                              <button className="confirm-yes" onClick={() => { onDeleteSection(section.id); setMenuOpen(null); setDeleteConfirm(null) }}>Yes, delete</button>
-                              <button className="confirm-no" onClick={() => setDeleteConfirm(null)}>Cancel</button>
-                            </div>
-                          </div>
-                        ) : (
-                          <button className="section-menu-delete" onClick={() => setDeleteConfirm(section.id)}>Delete</button>
+                        {section.id !== 'workspace' && (
+                          <>
+                            <div className="section-menu-divider" />
+                            {deleteConfirm === section.id ? (
+                              <div className="section-delete-confirm">
+                                <span>Delete section and all conversations?</span>
+                                <div className="section-delete-confirm-btns">
+                                  <button className="confirm-yes" onClick={() => { onDeleteSection(section.id); setMenuOpen(null); setDeleteConfirm(null) }}>Yes, delete</button>
+                                  <button className="confirm-no" onClick={() => setDeleteConfirm(null)}>Cancel</button>
+                                </div>
+                              </div>
+                            ) : (
+                              <button className="section-menu-delete" onClick={() => setDeleteConfirm(section.id)}>Delete</button>
+                            )}
+                          </>
                         )}
                       </div>
                     )}
