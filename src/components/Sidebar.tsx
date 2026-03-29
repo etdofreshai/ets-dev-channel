@@ -151,7 +151,7 @@ export default function Sidebar({
         </button>
         <button
           className="view-toggle-btn filter-toggle-btn"
-          title={`Showing: ${filterLabels[viewFilter]} — click to cycle`}
+          title={`Showing ${viewFilter === 'active' ? 'Active' : viewFilter === 'archived' ? 'Archived' : 'All'}`}
           onClick={() => setViewFilter(f => filterCycle[f])}
         >
           {filterLabels[viewFilter]}
@@ -167,7 +167,7 @@ export default function Sidebar({
 
           return (
             <div key={section.id} className="sidebar-section">
-              <div className="section-header" onClick={() => toggleSection(section.id)}>
+              <div className="section-header" onClick={() => toggleSection(section.id)} title={isCompact ? section.directory : undefined}>
                 <div className="section-header-left">
                   <span className={`section-chevron ${collapsed ? 'collapsed' : ''}`}>▼</span>
                   <div className="section-title-group">
@@ -239,6 +239,7 @@ export default function Sidebar({
                     key={c.id}
                     className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''} ${c.archived ? 'conv-archived' : ''}`}
                     onClick={() => onSelect(c.id)}
+                    title={c.description || undefined}
                     style={{ order: -c.lastTimestamp }}
                   >
                     <div className="conv-avatar">{c.avatar}</div>
