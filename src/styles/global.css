@@ -1076,3 +1076,53 @@ body {
   color: #fff;
 }
 .conv-avatar { position: relative; }
+
+/* Settings gear icon */
+.settings-gear {
+  position: fixed;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1000;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  padding: 0.25rem;
+  line-height: 1;
+}
+.settings-gear:hover { opacity: 1; }
+
+/* Settings modal extras */
+.settings-modal { min-width: 320px; position: relative; }
+.settings-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.settings-modal-close:hover { color: #f1f5f9; }
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+}
+.settings-label { color: #94a3b8; }
+.settings-value { color: #e2e8f0; font-family: monospace; font-size: 0.85rem; }
+.settings-reset-btn {
+  width: 100%;
+  padding: 0.5rem;
+  background: #7f1d1d;
+  color: #fca5a5;
+  border: 1px solid #991b1b;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.settings-reset-btn:hover { background: #991b1b; }

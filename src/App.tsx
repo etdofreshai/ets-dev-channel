@@ -9,6 +9,9 @@ import ChatArea from './components/ChatArea'
 import SetupWizard from './components/SetupWizard'
 
 export default function App() {
+  const [showSettings, setShowSettings] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+
   const provider = useMemo<DataProvider>(() => {
     const params = new URLSearchParams(window.location.search)
     const mode = params.get('data')
@@ -19,6 +22,7 @@ export default function App() {
 
   const isMock = provider instanceof MockProvider
   const isLive = provider instanceof LiveProvider
+  const providerName = isMock ? 'Mock' : isLive ? 'Live' : 'Browser'
 
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [sectionsList, setSectionsList] = useState<Section[]>([])
@@ -129,8 +133,33 @@ export default function App() {
     setConversations(prev => prev.filter(c => c.sectionId !== id))
   }
 
+  const settingsModal = showSettings && (
+    <div className="modal-overlay" onClick={() => { setShowSettings(false); setShowResetConfirm(false) }}>
+      <div className="modal-dialog settings-modal" onClick={e => e.stopPropagation()}>
+        <button className="settings-modal-close" onClick={() => { setShowSettings(false); setShowResetConfirm(false) }}>✕</button>
+        <h3>Settings</h3>
+        <div className="settings-row"><span className="settings-label">Provider</span><span className="settings-value">{providerName}</span></div>
+        <div className="settings-row"><span className="settings-label">Workspace</span><span className="settings-value">{window.location.origin}{window.location.pathname}</span></div>
+        <hr style={{ border: 'none', borderTop: '1px solid #334155', margin: '1rem 0' }} />
+        {!showResetConfirm ? (
+          <button className="settings-reset-btn" onClick={() => setShowResetConfirm(true)}>Reset All Data</button>
+        ) : (
+          <div>
+            <p style={{ color: '#f87171', fontSize: '0.9rem', marginBottom: '0.75rem' }}>This will delete all conversations, messages, and sections. Are you sure?</p>
+            <div className="modal-btns">
+              <button className="confirm-yes" onClick={() => { localStorage.removeItem('ets-dev-channel-db'); window.location.reload() }}>Yes, Reset</button>
+              <button className="confirm-no" onClick={() => setShowResetConfirm(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
   return (
     <div className="app">
+      <button className="settings-gear" onClick={() => setShowSettings(true)} title="Settings">⚙️</button>
+      {settingsModal}
       <Sidebar
         conversations={conversations}
         sections={sectionsList}
