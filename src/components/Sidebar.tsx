@@ -260,9 +260,7 @@ export default function Sidebar({
                       title={c.description || undefined}
                       style={{ order: -c.lastTimestamp }}
                     >
-                      {isSub && (
-                        <span className="conv-tree-line">{isLastChild ? '└─' : '├─'}</span>
-                      )}
+
                       <div className="conv-avatar">
                         {c.avatar}
                         {hasChildren && (
