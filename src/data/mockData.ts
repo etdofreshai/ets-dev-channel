@@ -27,6 +27,7 @@ export interface Conversation {
   messages: Message[]
   sectionId: string
   archived?: boolean
+  description?: string
 }
 
 const now = Date.now()

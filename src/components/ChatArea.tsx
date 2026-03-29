@@ -1,15 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
 import { Conversation, Message } from '../data/mockData'
 import MessageBubble from './MessageBubble'
+import ConversationInfoPanel from './ConversationInfoPanel'
 
 interface Props {
   conversation: Conversation | null
   onSend: (convId: string, text: string) => void
   onBack: () => void
+  onUpdateConversation: (id: string, fields: Partial<Conversation>) => void
 }
 
-export default function ChatArea({ conversation, onSend, onBack }: Props) {
+export default function ChatArea({ conversation, onSend, onBack, onUpdateConversation }: Props) {
   const [input, setInput] = useState('')
+  const [infoPanelOpen, setInfoPanelOpen] = useState(false)
   const messagesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -44,10 +47,10 @@ export default function ChatArea({ conversation, onSend, onBack }: Props) {
     <div className="chat-area">
       <div className="chat-header">
         <button className="chat-header-back" onClick={onBack}>←</button>
-        <div className="conv-avatar" style={{ width: 36, height: 36, fontSize: 16 }}>
+        <div className="conv-avatar chat-header-clickable" style={{ width: 36, height: 36, fontSize: 16 }} onClick={() => setInfoPanelOpen(true)}>
           {conversation.avatar}
         </div>
-        <div className="chat-header-info">
+        <div className="chat-header-info chat-header-clickable" onClick={() => setInfoPanelOpen(true)}>
           <h2>{conversation.name}</h2>
           <div className="chat-header-status">
             {conversation.typing ? 'typing...' : conversation.online ? 'online' : 'last seen recently'}
@@ -78,6 +81,13 @@ export default function ChatArea({ conversation, onSend, onBack }: Props) {
         <button className="input-btn" title="Voice message">🎤</button>
         <button className="send-btn" onClick={handleSend} title="Send">➤</button>
       </div>
+
+      <ConversationInfoPanel
+        conversation={conversation}
+        open={infoPanelOpen}
+        onClose={() => setInfoPanelOpen(false)}
+        onUpdate={onUpdateConversation}
+      />
     </div>
   )
 }

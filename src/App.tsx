@@ -65,6 +65,10 @@ export default function App() {
     setSectionsList(prev => [...prev, { id, name, directory, order: prev.length }])
   }
 
+  const handleUpdateConversation = (id: string, fields: Partial<Conversation>) => {
+    setConversations(prev => prev.map(c => c.id === id ? { ...c, ...fields } : c))
+  }
+
   const handleDeleteSection = (id: string) => {
     setSectionsList(prev => prev.filter(s => s.id !== id))
     setConversations(prev => prev.filter(c => c.sectionId !== id))
@@ -91,6 +95,7 @@ export default function App() {
         conversation={activeConv}
         onSend={handleSend}
         onBack={() => setSidebarHidden(false)}
+        onUpdateConversation={handleUpdateConversation}
       />
     </div>
   )
