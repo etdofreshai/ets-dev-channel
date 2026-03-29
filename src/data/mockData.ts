@@ -62,7 +62,7 @@ export const conversations: Conversation[] = [
   },
   {
     id: '1-sub-1',
-    name: '🔧 Fix Monarch Zod',
+    name: 'Fix Monarch Zod',
     avatar: '🔧',
     lastMessage: 'Patched Zod schema — types now validate correctly',
     lastTimestamp: m(12),
@@ -77,7 +77,7 @@ export const conversations: Conversation[] = [
   },
   {
     id: '1-sub-2',
-    name: '📊 Deep Analysis Report',
+    name: 'Deep Analysis Report',
     avatar: '📊',
     lastMessage: 'Report generated — 14 findings, 2 critical',
     lastTimestamp: m(45),
@@ -91,7 +91,7 @@ export const conversations: Conversation[] = [
   },
   {
     id: '1-sub-3',
-    name: '🐙 Ingestor Sync Fix',
+    name: 'Ingestor Sync Fix',
     avatar: '🐙',
     lastMessage: 'Sync loop patched — no more duplicate events',
     lastTimestamp: h(2),
