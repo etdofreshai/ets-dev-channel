@@ -2,6 +2,18 @@ import { useState, useEffect, useRef } from 'react'
 import { Conversation, Section } from '../data/mockData'
 
 type ViewMode = 'regular' | 'compact'
+type ViewFilter = 'active' | 'archived' | 'all'
+
+const filterLabels: Record<ViewFilter, string> = {
+  active: 'Active',
+  archived: 'Archived',
+  all: 'All',
+}
+const filterCycle: Record<ViewFilter, ViewFilter> = {
+  active: 'archived',
+  archived: 'all',
+  all: 'active',
+}
 
 function formatTime(ts: number) {
   const d = new Date(ts)
@@ -36,6 +48,7 @@ export default function Sidebar({
   const [viewMode, setViewMode] = useState<ViewMode>(() =>
     (localStorage.getItem('sidebar-view') as ViewMode) || 'regular'
   )
+  const [viewFilter, setViewFilter] = useState<ViewFilter>('active')
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => {
     try {
       return new Set(JSON.parse(localStorage.getItem('sidebar-collapsed') || '[]'))
@@ -79,9 +92,12 @@ export default function Sidebar({
     })
   }
 
-  const filtered = conversations.filter(c =>
-    !c.archived && c.name.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = conversations.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase())
+    if (viewFilter === 'active') return !c.archived && matchesSearch
+    if (viewFilter === 'archived') return c.archived && matchesSearch
+    return matchesSearch // 'all'
+  })
 
   const sortedSections = [...sections].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   const isCompact = viewMode === 'compact'
@@ -132,6 +148,14 @@ export default function Sidebar({
           onClick={toggleView}
         >
           {isCompact ? '☰' : '≡'}
+        </button>
+        <button
+          className="view-toggle-btn filter-toggle-btn"
+          title={`Showing: ${filterLabels[viewFilter]} — click to cycle`}
+          onClick={() => setViewFilter(f => filterCycle[f])}
+        >
+          👁
+          <span className="filter-label">{filterLabels[viewFilter]}</span>
         </button>
       </div>
       <div className="conversation-list">
@@ -214,7 +238,7 @@ export default function Sidebar({
                 {sectionConvs.map(c => (
                   <div
                     key={c.id}
-                    className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''}`}
+                    className={`conv-item ${c.id === activeId ? 'active' : ''} ${isCompact ? 'compact' : ''} ${c.archived ? 'conv-archived' : ''}`}
                     onClick={() => onSelect(c.id)}
                     style={{ order: -c.lastTimestamp }}
                   >
@@ -224,11 +248,19 @@ export default function Sidebar({
                         <span className="conv-name">{c.name}</span>
                         <div className="conv-actions-row">
                           <span className="conv-time">{formatTime(c.lastTimestamp)}</span>
-                          <button
-                            className="conv-archive-btn"
-                            title="Archive"
-                            onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
-                          >✕</button>
+                          {c.archived ? (
+                            <button
+                              className="conv-archive-btn conv-delete-btn"
+                              title="Delete permanently"
+                              onClick={e => { e.stopPropagation(); onDeleteConversation(c.id) }}
+                            >✕</button>
+                          ) : (
+                            <button
+                              className="conv-archive-btn"
+                              title="Archive"
+                              onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
+                            >📦</button>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -237,11 +269,19 @@ export default function Sidebar({
                           <span className="conv-name">{c.name}</span>
                           <div className="conv-actions-row">
                             <span className="conv-time">{formatTime(c.lastTimestamp)}</span>
-                            <button
-                              className="conv-archive-btn"
-                              title="Archive"
-                              onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
-                            >✕</button>
+                            {c.archived ? (
+                              <button
+                                className="conv-archive-btn conv-delete-btn"
+                                title="Delete permanently"
+                                onClick={e => { e.stopPropagation(); onDeleteConversation(c.id) }}
+                              >✕</button>
+                            ) : (
+                              <button
+                                className="conv-archive-btn"
+                                title="Archive"
+                                onClick={e => { e.stopPropagation(); onArchiveConversation(c.id) }}
+                              >📦</button>
+                            )}
                           </div>
                         </div>
                         <div className="conv-preview">{c.lastMessage}</div>

@@ -904,3 +904,27 @@ body {
 .info-panel-textarea:focus {
   border-color: #7c6bf0;
 }
+
+/* Filter toggle */
+.filter-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+  padding: 4px 6px !important;
+}
+.filter-label {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* Archived conversation styling */
+.conv-item.conv-archived {
+  opacity: 0.55;
+}
+.conv-item.conv-archived .conv-name {
+  color: #888;
+}
+.conv-delete-btn {
+  color: #e55 !important;
+}
