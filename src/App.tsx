@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { conversations as initialConversations, Conversation, Message } from './data/mockData'
+import { conversations as initialConversations, sections, Conversation, Message } from './data/mockData'
 import Sidebar from './components/Sidebar'
 import ChatArea from './components/ChatArea'
 
@@ -33,12 +33,29 @@ export default function App() {
     )
   }
 
+  const handleNewConversation = (sectionId: string) => {
+    const id = `new-${Date.now()}`
+    const newConv: Conversation = {
+      id,
+      name: 'New Conversation',
+      avatar: '💬',
+      lastMessage: '',
+      lastTimestamp: Date.now(),
+      sectionId,
+      messages: [],
+    }
+    setConversations(prev => [newConv, ...prev])
+    setActiveId(id)
+  }
+
   return (
     <div className="app">
       <Sidebar
         conversations={conversations}
+        sections={sections}
         activeId={activeId}
         onSelect={handleSelect}
+        onNewConversation={handleNewConversation}
         search={search}
         onSearch={setSearch}
         hidden={sidebarHidden}

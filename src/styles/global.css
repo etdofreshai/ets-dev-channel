@@ -99,22 +99,124 @@ body {
   color: var(--text-muted);
 }
 
-.new-btn {
-  background: var(--accent);
-  border: none;
-  border-radius: 50%;
+.view-toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   width: 34px;
   height: 34px;
-  color: white;
-  font-size: 18px;
+  color: var(--text-secondary);
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
 }
-.new-btn:hover {
-  background: var(--accent-hover);
+.view-toggle-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* Sections */
+.sidebar-section {
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.section-header:hover {
+  background: var(--bg-hover);
+}
+
+.section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.section-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.section-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+.section-title-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.section-name {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.section-dir {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-add-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.section-add-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* Compact mode */
+.conv-item.compact {
+  padding: 4px 12px;
+}
+.conv-item.compact .conv-avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+}
+.compact-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.conv-item.compact .conv-name {
+  font-size: 13px;
+}
+.conv-item.compact .conv-time {
+  font-size: 10px;
 }
 
 .conversation-list {
