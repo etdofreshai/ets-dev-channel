@@ -22,6 +22,7 @@ export default function App() {
   const [sidebarHidden, setSidebarHidden] = useState(false)
   const [setupComplete, setSetupComplete] = useState(isMock)
   const [loading, setLoading] = useState(true)
+  const [backendError, setBackendError] = useState<string | null>(null)
 
   const reload = useCallback(async () => {
     const [convs, secs] = await Promise.all([provider.getConversations(), provider.getSections()])
@@ -32,11 +33,17 @@ export default function App() {
 
   useEffect(() => {
     ;(async () => {
-      if (!isMock) {
-        const settings = await provider.getSettings()
-        setSetupComplete(settings.setupComplete)
+      try {
+        if (!isMock) {
+          const settings = await provider.getSettings()
+          setSetupComplete(settings.setupComplete)
+        }
+        await reload()
+      } catch (err: any) {
+        if (!isMock) {
+          setBackendError(err?.message || 'Cannot connect to backend')
+        }
       }
-      await reload()
       setLoading(false)
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -52,6 +59,21 @@ export default function App() {
   const activeConvWithMessages = activeConv ? { ...activeConv, messages } : null
 
   if (loading) return null
+  if (backendError) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', color: '#94a3b8', gap: '1rem', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ fontSize: '3rem' }}>🐙</div>
+        <h2 style={{ color: '#f1f5f9', margin: 0 }}>Backend Not Running</h2>
+        <p style={{ maxWidth: 400, lineHeight: 1.5 }}>
+          The Express server isn't reachable. Start it with:<br/>
+          <code style={{ background: '#1e293b', padding: '0.25rem 0.5rem', borderRadius: 4, fontSize: '0.9rem' }}>npm run dev:full</code>
+        </p>
+        <p style={{ fontSize: '0.85rem' }}>
+          Or use <a href="?data=mock" style={{ color: '#60a5fa' }}>mock mode</a> for the testbed.
+        </p>
+      </div>
+    )
+  }
   if (!setupComplete) {
     return <SetupWizard provider={provider} onComplete={() => { setSetupComplete(true); reload() }} />
   }
