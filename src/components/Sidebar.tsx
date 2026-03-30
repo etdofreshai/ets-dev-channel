@@ -198,7 +198,7 @@ export default function Sidebar({
                               section.provider === 'claude-code' ? 'rgba(100,149,237,0.2)' : 'rgba(255,165,0,0.2)',
                             padding: '1px 6px', borderRadius: 4,
                           }}>
-                            {section.provider === 'openclaw' ? '🐙' : section.provider === 'claude-code' ? '💻' : '🦞'}
+                            {section.provider === 'openclaw' ? '🦞' : section.provider === 'claude-code' ? '💻' : '🐙'}
                             {' '}{section.provider}
                           </span>
                         )}

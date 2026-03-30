@@ -7,9 +7,9 @@ interface Props {
 }
 
 const PROVIDERS = [
-  { id: 'openclaw', label: '🐙 OpenClaw', desc: 'Your main AI assistant' },
+  { id: 'openclaw', label: '🦞 OpenClaw', desc: 'Your main AI assistant' },
   { id: 'claude-code', label: '💻 Claude Code', desc: 'Coding assistant' },
-  { id: 'etclaw', label: '🦞 ETClaw', desc: 'Desktop instance' },
+  { id: 'etclaw', label: '🐙 ETClaw', desc: 'Desktop instance' },
 ]
 
 export default function SetupWizard({ provider, onComplete }: Props) {
