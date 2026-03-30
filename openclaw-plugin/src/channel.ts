@@ -33,6 +33,14 @@ function resolveAccount(
 export const etsDevChannelPlugin = createChatChannelPlugin<ResolvedAccount>({
   base: createChannelPluginBase({
     id: "ets-dev-channel",
+    capabilities: {
+      chatTypes: ["direct"],
+      reactions: false,
+      threads: false,
+      media: false,
+      nativeCommands: false,
+      blockStreaming: true,
+    },
     setup: {
       resolveAccount,
       inspectAccount(cfg) {
