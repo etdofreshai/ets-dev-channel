@@ -47,8 +47,8 @@ export default function App() {
         if (isMock) {
           setSetupComplete(true)
         } else {
-          const settings = await provider.getSettings()
-          setSetupComplete(settings.setupComplete && secs.length > 0)
+          const [settings, sections] = await Promise.all([provider.getSettings(), provider.getSections()])
+          setSetupComplete(settings.setupComplete && sections.length > 0)
         }
         await reload()
       } catch (err: any) {
@@ -196,3 +196,4 @@ export default function App() {
     </div>
   )
 }
+// build 1774848085
