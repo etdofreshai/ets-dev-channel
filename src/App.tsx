@@ -48,7 +48,7 @@ export default function App() {
           setSetupComplete(true)
         } else {
           const settings = await provider.getSettings()
-          setSetupComplete(settings.setupComplete)
+          setSetupComplete(settings.setupComplete && secs.length > 0)
         }
         await reload()
       } catch (err: any) {
@@ -135,8 +135,10 @@ export default function App() {
 
   const handleDeleteSection = async (id: string) => {
     await provider.deleteSection(id)
-    setSectionsList(prev => prev.filter(s => s.id !== id))
+    const remaining = sectionsList.filter(s => s.id !== id)
+    setSectionsList(remaining)
     setConversations(prev => prev.filter(c => c.sectionId !== id))
+    if (remaining.length === 0) setSetupComplete(false)
   }
 
   const settingsModal = showSettings && (
