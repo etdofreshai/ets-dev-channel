@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { getDb, save, queryAll } from '../db.js'
 import crypto from 'crypto'
+import { enqueueUserMessage } from './bot.js'
 
 const router = Router()
 
@@ -20,7 +21,9 @@ router.post('/:id/messages', async (req, res) => {
     [id, req.params.id, text, sender || 'me', now, type])
   db.run('UPDATE conversations SET updatedAt = ? WHERE id = ?', [now, req.params.id])
   save()
-  res.json({ id, conversationId: req.params.id, text, sender: sender || 'me', timestamp: now, type })
+  const msg = { id, conversationId: req.params.id, text, sender: sender || 'me', timestamp: now }
+  enqueueUserMessage(msg)
+  res.json({ ...msg, type })
 })
 
 export default router

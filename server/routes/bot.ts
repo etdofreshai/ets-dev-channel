@@ -4,6 +4,71 @@ import crypto from 'crypto'
 
 const router = Router()
 
+// Track the last update_id delivered via getUpdates
+let lastUpdateId = 0
+// Queue of undelivered user messages for polling
+const updateQueue: Array<{
+  update_id: number
+  message: {
+    message_id: string
+    chat: { id: string }
+    from: { id: string; first_name: string }
+    text: string
+    date: number
+  }
+}> = []
+
+// Called internally when a user sends a message
+export function enqueueUserMessage(msg: { id: string; conversationId: string; text: string; sender: string; timestamp: number }) {
+  if (msg.sender === 'bot') return // Don't queue bot messages
+  lastUpdateId++
+  updateQueue.push({
+    update_id: lastUpdateId,
+    message: {
+      message_id: msg.id,
+      chat: { id: msg.conversationId },
+      from: { id: msg.sender, first_name: msg.sender },
+      text: msg.text,
+      date: Math.floor(msg.timestamp / 1000),
+    },
+  })
+}
+
+// Long-polling endpoint — mirrors Telegram's getUpdates
+router.get('/getUpdates', async (req, res) => {
+  const offset = parseInt(req.query.offset as string) || 0
+  const timeout = Math.min(parseInt(req.query.timeout as string) || 30, 60)
+
+  // Return any updates with update_id >= offset
+  const pending = updateQueue.filter(u => u.update_id >= offset)
+  if (pending.length > 0) {
+    return res.json({ ok: true, result: pending })
+  }
+
+  // Long-poll: wait up to `timeout` seconds for new messages
+  const start = Date.now()
+  const interval = setInterval(() => {
+    const updates = updateQueue.filter(u => u.update_id >= offset)
+    if (updates.length > 0 || Date.now() - start >= timeout * 1000) {
+      clearInterval(interval)
+      res.json({ ok: true, result: updates })
+    }
+  }, 500)
+
+  // Cleanup on client disconnect
+  req.on('close', () => clearInterval(interval))
+})
+
+// Trim acknowledged updates (keep queue small)
+router.post('/ackUpdates', (req, res) => {
+  const { offset } = req.body
+  if (offset) {
+    const idx = updateQueue.findIndex(u => u.update_id >= offset)
+    if (idx > 0) updateQueue.splice(0, idx)
+  }
+  res.json({ ok: true })
+})
+
 // In-memory typing state
 const typingState = new Map<string, { action: string; timestamp: number }>()
 

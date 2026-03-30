@@ -37,3 +37,22 @@ export async function deleteMessage(chatId: string, messageId: string) {
 export async function sendChatAction(chatId: string, action: string) {
   return request("/bot/sendChatAction", { chat_id: chatId, action });
 }
+
+export type Update = {
+  update_id: number;
+  message: {
+    message_id: string;
+    chat: { id: string };
+    from: { id: string; first_name: string };
+    text: string;
+    date: number;
+  };
+};
+
+export async function getUpdates(offset: number = 0, timeout: number = 30): Promise<Update[]> {
+  const res = await fetch(`${BASE_URL}/bot/getUpdates?offset=${offset}&timeout=${timeout}`, {
+    signal: AbortSignal.timeout((timeout + 5) * 1000),
+  });
+  const data = await res.json() as { ok: boolean; result: Update[] };
+  return data.result || [];
+}
