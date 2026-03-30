@@ -65,6 +65,11 @@ export default function App() {
   useEffect(() => {
     if (!activeId) { setMessages([]); return }
     provider.getMessages(activeId).then(setMessages)
+    // Poll for new messages every 2 seconds
+    const interval = setInterval(() => {
+      provider.getMessages(activeId).then(setMessages)
+    }, 2000)
+    return () => clearInterval(interval)
   }, [activeId, provider])
 
   const activeConvWithMessages = activeConv ? { ...activeConv, messages } : null
