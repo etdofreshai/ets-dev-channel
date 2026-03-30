@@ -53,6 +53,9 @@ export async function getUpdates(offset: number = 0, timeout: number = 30): Prom
   const res = await fetch(`${BASE_URL}/bot/getUpdates?offset=${offset}&timeout=${timeout}`, {
     signal: AbortSignal.timeout((timeout + 5) * 1000),
   });
+  if (!res.ok) {
+    throw new Error(`getUpdates HTTP ${res.status}`);
+  }
   const data = await res.json() as { ok: boolean; result: Update[] };
   return data.result || [];
 }
