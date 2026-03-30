@@ -41,6 +41,18 @@ export const etsDevChannelPlugin = createChatChannelPlugin<ResolvedAccount>({
       nativeCommands: false,
       blockStreaming: true,
     },
+    config: {
+      listAccountIds: (cfg: OpenClawConfig) => {
+        const section = (cfg.channels as Record<string, any>)?.["ets-dev-channel"];
+        return section ? ["default"] : [];
+      },
+      resolveAccount: (cfg: OpenClawConfig, accountId?: string | null) => resolveAccount(cfg, accountId),
+      defaultAccountId: () => "default",
+      isConfigured: (account: ResolvedAccount) => Boolean(account.url),
+      resolveAllowFrom: (account: ResolvedAccount) => account.allowFrom,
+      resolveDefaultTo: () => undefined,
+    },
+    reload: { configPrefixes: ["channels.ets-dev-channel"] },
     setup: {
       resolveAccount,
       inspectAccount(cfg) {
