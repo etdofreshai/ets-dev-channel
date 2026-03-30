@@ -1,0 +1,26 @@
+{
+  "id": "ets-dev-channel",
+  "kind": "channel",
+  "channels": ["ets-dev-channel"],
+  "name": "ET's Dev Channel",
+  "description": "Connect OpenClaw to ET's Dev Channel",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "ets-dev-channel": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "url": { "type": "string" },
+          "token": { "type": "string" },
+          "allowFrom": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dmPolicy": { "type": "string" }
+        }
+      }
+    }
+  }
+}

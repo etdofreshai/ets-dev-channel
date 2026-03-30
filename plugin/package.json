@@ -1,0 +1,17 @@
+{
+  "name": "@etdofreshai/openclaw-ets-dev-channel",
+  "version": "1.0.0",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "ets-dev-channel",
+      "label": "ET's Dev Channel",
+      "blurb": "Connect OpenClaw to ET's Dev Channel chat interface."
+    }
+  },
+  "dependencies": {
+    "openclaw": "*"
+  }
+}
