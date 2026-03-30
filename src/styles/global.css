@@ -1147,9 +1147,90 @@ body {
   animation: pulse-red 1s infinite;
   color: #ef4444;
 }
+.input-btn.recording-active {
+  color: #e94560;
+  font-size: 1.4rem;
+  animation: pulse-red 1s infinite;
+}
 @keyframes pulse-red {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* ── Voice Recording: Holding State ── */
+.voice-holding-area {
+  position: relative;
+  transition: background 0.2s;
+}
+.voice-holding-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  min-width: 0;
+  user-select: none;
+}
+.voice-rec-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #e94560;
+  animation: pulse-red 1s infinite;
+  flex-shrink: 0;
+}
+.voice-rec-timer {
+  font-family: monospace;
+  font-size: 1rem;
+  color: #e2e8f0;
+  min-width: 40px;
+}
+.voice-slide-cancel {
+  color: #8899a6;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  animation: slide-hint 1.5s ease-in-out infinite;
+}
+@keyframes slide-hint {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.voice-mic-btn-area {
+  display: flex;
+  align-items: center;
+  touch-action: none;
+}
+.voice-lock-indicator {
+  position: absolute;
+  top: -48px;
+  right: 16px;
+  font-size: 1.4rem;
+  background: #16213e;
+  border: 1px solid #2a3a5c;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s, transform 0.15s;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Voice Recording: Locked State ── */
+.voice-locked-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.voice-locked-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.voice-locked-btn {
+  font-size: 1.1rem;
+}
+.voice-cancel-btn:hover {
+  color: #e94560 !important;
 }
 
 /* Image messages */
