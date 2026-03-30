@@ -190,7 +190,7 @@ export default function Sidebar({
                     ) : (
                       <>
                         <span className="section-name">{section.name}</span>
-                        {!isCompact && <span className="section-dir">{section.directory}</span>}
+                        {!isCompact && section.directory && <span className="section-dir">{section.directory}</span>}
                         {!isCompact && section.provider && (
                           <span className="section-provider" style={{
                             fontSize: 10, opacity: 0.5, marginLeft: 4,

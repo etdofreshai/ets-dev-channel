@@ -18,10 +18,11 @@ export default function SetupWizard({ provider, onComplete }: Props) {
   const [saving, setSaving] = useState(false)
 
   const handleSubmit = async () => {
-    if (!workspaceDir.trim()) return
+    const dir = selectedProvider === 'openclaw' ? '' : workspaceDir.trim()
+    if (selectedProvider !== 'openclaw' && !dir) return
     setSaving(true)
-    await provider.updateSettings({ workspaceDir: workspaceDir.trim(), setupComplete: true })
-    await provider.createSection('Workspace', workspaceDir.trim(), selectedProvider)
+    await provider.updateSettings({ workspaceDir: dir, setupComplete: true })
+    await provider.createSection('Workspace', dir, selectedProvider)
     onComplete()
   }
 
@@ -58,24 +59,28 @@ export default function SetupWizard({ provider, onComplete }: Props) {
           ))}
         </div>
 
-        <label style={{ display: 'block', textAlign: 'left', marginBottom: 8, fontSize: 14, opacity: 0.8 }}>
-          Workspace Directory
-        </label>
-        <input
-          type="text"
-          value={workspaceDir}
-          onChange={e => setWorkspaceDir(e.target.value)}
-          placeholder="/app/data/workspace"
-          onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-          style={{
-            width: '100%', padding: '12px 16px', borderRadius: 8, border: '1px solid #333',
-            background: '#0f3460', color: '#e0e0e0', fontSize: 16, outline: 'none',
-            boxSizing: 'border-box', marginBottom: 24,
-          }}
-        />
+        {selectedProvider !== 'openclaw' && (
+          <>
+            <label style={{ display: 'block', textAlign: 'left', marginBottom: 8, fontSize: 14, opacity: 0.8 }}>
+              Workspace Directory
+            </label>
+            <input
+              type="text"
+              value={workspaceDir}
+              onChange={e => setWorkspaceDir(e.target.value)}
+              placeholder="/app/data/workspace"
+              onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+              style={{
+                width: '100%', padding: '12px 16px', borderRadius: 8, border: '1px solid #333',
+                background: '#0f3460', color: '#e0e0e0', fontSize: 16, outline: 'none',
+                boxSizing: 'border-box', marginBottom: 24,
+              }}
+            />
+          </>
+        )}
         <button
           onClick={handleSubmit}
-          disabled={!workspaceDir.trim() || saving}
+          disabled={saving}
           style={{
             width: '100%', padding: '14px', borderRadius: 8, border: 'none',
             background: workspaceDir.trim() ? '#e94560' : '#555', color: '#fff',
