@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function SetupWizard({ provider, onComplete }: Props) {
-  const [workspaceDir, setWorkspaceDir] = useState('')
+  const [workspaceDir, setWorkspaceDir] = useState('/app/data/workspace')
   const [saving, setSaving] = useState(false)
 
   const handleSubmit = async () => {
