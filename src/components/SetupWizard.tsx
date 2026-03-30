@@ -37,7 +37,7 @@ export default function SetupWizard({ provider, onComplete }: Props) {
           type="text"
           value={workspaceDir}
           onChange={e => setWorkspaceDir(e.target.value)}
-          placeholder="/home/user/workspace"
+          placeholder="/app/data/workspace"
           onKeyDown={e => e.key === 'Enter' && handleSubmit()}
           style={{
             width: '100%', padding: '12px 16px', borderRadius: 8, border: '1px solid #333',
