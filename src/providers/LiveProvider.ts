@@ -55,4 +55,16 @@ export class LiveProvider implements DataProvider {
   async updateSettings(settings: Partial<AppSettings>): Promise<void> {
     await api('/settings', { method: 'PATCH', body: JSON.stringify(settings) })
   }
+
+  async uploadFile(conversationId: string, file: File, text?: string): Promise<Message> {
+    const form = new FormData()
+    form.append('file', file)
+    if (text) form.append('text', text)
+    const res = await fetch(`${BASE}/conversations/${conversationId}/upload`, {
+      method: 'POST',
+      body: form,
+    })
+    if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+    return res.json()
+  }
 }

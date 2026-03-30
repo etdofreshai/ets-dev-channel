@@ -29,8 +29,13 @@ export async function getDb(): Promise<Database> {
   )`)
   db.run(`CREATE TABLE IF NOT EXISTS messages (
     id TEXT PRIMARY KEY, conversationId TEXT, text TEXT, sender TEXT,
-    timestamp INTEGER, type TEXT DEFAULT 'text'
+    timestamp INTEGER, type TEXT DEFAULT 'text',
+    fileUrl TEXT, fileName TEXT, mimeType TEXT
   )`)
+  // Migration: add file columns to existing messages tables
+  try { db.run(`ALTER TABLE messages ADD COLUMN fileUrl TEXT`) } catch {}
+  try { db.run(`ALTER TABLE messages ADD COLUMN fileName TEXT`) } catch {}
+  try { db.run(`ALTER TABLE messages ADD COLUMN mimeType TEXT`) } catch {}
 
   // Seed default settings if empty
   const stmt = db.prepare('SELECT COUNT(*) as c FROM settings')

@@ -3,9 +3,12 @@ export interface Message {
   text: string
   sender: 'me' | 'other'
   timestamp: number
-  type: 'text' | 'code' | 'voice' | 'file'
+  type: 'text' | 'code' | 'voice' | 'file' | 'image'
   senderName?: string
   language?: string
+  fileUrl?: string
+  fileName?: string
+  mimeType?: string
 }
 
 export interface Section {

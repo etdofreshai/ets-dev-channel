@@ -1126,3 +1126,45 @@ body {
   font-size: 0.9rem;
 }
 .settings-reset-btn:hover { background: #991b1b; }
+
+/* Drop overlay */
+.drop-overlay {
+  position: absolute; inset: 0; z-index: 100;
+  background: rgba(37, 99, 235, 0.15);
+  border: 3px dashed #3b82f6;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.drop-overlay-content {
+  font-size: 1.3rem; color: #93c5fd;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 1rem 2rem; border-radius: 12px;
+}
+
+/* Recording button pulse */
+.input-btn.recording {
+  animation: pulse-red 1s infinite;
+  color: #ef4444;
+}
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Image messages */
+.msg-image img { display: block; cursor: pointer; }
+.msg-caption, .msg-voice-caption {
+  margin-top: 4px; font-size: 0.9rem;
+  color: var(--text-primary, #e2e8f0);
+}
+
+/* File messages */
+.msg-file-link {
+  display: flex; align-items: center; gap: 8px;
+  color: #60a5fa; text-decoration: none;
+  padding: 6px 0;
+}
+.msg-file-link:hover { text-decoration: underline; }
+.msg-file-icon { font-size: 1.4rem; }
+.msg-file-name { font-size: 0.9rem; word-break: break-all; }

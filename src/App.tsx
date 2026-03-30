@@ -105,6 +105,16 @@ export default function App() {
     ))
   }
 
+  const handleUpload = async (convId: string, file: File, text?: string) => {
+    if (!provider.uploadFile) return
+    const msg = await provider.uploadFile(convId, file, text)
+    setMessages(prev => [...prev, msg])
+    const label = file.type.startsWith('image/') ? '🖼️ Photo' : file.type.startsWith('audio/') ? '🎤 Voice' : `📎 ${file.name}`
+    setConversations(prev => prev.map(c =>
+      c.id === convId ? { ...c, lastMessage: label, lastTimestamp: Date.now() } : c
+    ))
+  }
+
   const handleNewConversation = async (sectionId: string) => {
     const conv = await provider.createConversation(sectionId, 'New Conversation')
     setConversations(prev => [conv, ...prev])
@@ -190,6 +200,7 @@ export default function App() {
       <ChatArea
         conversation={activeConvWithMessages}
         onSend={handleSend}
+        onUpload={handleUpload}
         onBack={() => setSidebarHidden(false)}
         onUpdateConversation={handleUpdateConversation}
       />

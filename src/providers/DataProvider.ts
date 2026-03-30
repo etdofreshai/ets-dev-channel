@@ -19,4 +19,5 @@ export interface DataProvider {
   deleteSection(id: string): Promise<void>
   getSettings(): Promise<AppSettings>
   updateSettings(settings: Partial<AppSettings>): Promise<void>
+  uploadFile?(conversationId: string, file: File, text?: string): Promise<Message>
 }

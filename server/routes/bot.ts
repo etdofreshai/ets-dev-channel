@@ -19,10 +19,10 @@ const updateQueue: Array<{
 }> = []
 
 // Called internally when a user sends a message
-export function enqueueUserMessage(msg: { id: string; conversationId: string; text: string; sender: string; timestamp: number }) {
+export function enqueueUserMessage(msg: { id: string; conversationId: string; text: string; sender: string; timestamp: number; type?: string; fileUrl?: string; fileName?: string; mimeType?: string }) {
   if (msg.sender === 'bot') return // Don't queue bot messages
   lastUpdateId++
-  updateQueue.push({
+  const update: any = {
     update_id: lastUpdateId,
     message: {
       message_id: msg.id,
@@ -31,7 +31,11 @@ export function enqueueUserMessage(msg: { id: string; conversationId: string; te
       text: msg.text,
       date: Math.floor(msg.timestamp / 1000),
     },
-  })
+  }
+  if (msg.fileUrl) {
+    update.message.file = { url: msg.fileUrl, name: msg.fileName, mimeType: msg.mimeType }
+  }
+  updateQueue.push(update)
 }
 
 // Long-polling endpoint — mirrors Telegram's getUpdates
