@@ -22,4 +22,16 @@ router.patch('/', async (req, res) => {
   res.json({ ok: true })
 })
 
+router.post('/reset', async (_req, res) => {
+  const db = await getDb()
+  db.run('DELETE FROM messages')
+  db.run('DELETE FROM conversations')
+  db.run('DELETE FROM sections')
+  db.run('DELETE FROM settings')
+  db.run('INSERT INTO settings (key, value) VALUES (?, ?)', ['workspaceDir', ''])
+  db.run('INSERT INTO settings (key, value) VALUES (?, ?)', ['setupComplete', 'false'])
+  save()
+  res.json({ ok: true })
+})
+
 export default router

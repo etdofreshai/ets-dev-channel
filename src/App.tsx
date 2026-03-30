@@ -153,7 +153,11 @@ export default function App() {
           <div>
             <p style={{ color: '#f87171', fontSize: '0.9rem', marginBottom: '0.75rem' }}>This will delete all conversations, messages, and sections. Are you sure?</p>
             <div className="modal-btns">
-              <button className="confirm-yes" onClick={() => { localStorage.removeItem('ets-dev-channel-db'); window.location.reload() }}>Yes, Reset</button>
+              <button className="confirm-yes" onClick={async () => {
+                localStorage.removeItem('ets-dev-channel-db');
+                try { await fetch(`${import.meta.env.BASE_URL}api/settings/reset`.replace(/\/\//g, '/'), { method: 'POST' }) } catch {}
+                window.location.reload()
+              }}>Yes, Reset</button>
               <button className="confirm-no" onClick={() => setShowResetConfirm(false)}>Cancel</button>
             </div>
           </div>
