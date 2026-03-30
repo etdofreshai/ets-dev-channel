@@ -14,7 +14,7 @@ export interface DataProvider {
   updateConversation(id: string, updates: Partial<Conversation>): Promise<void>
   archiveConversation(id: string): Promise<void>
   deleteConversation(id: string): Promise<void>
-  createSection(name: string, directory: string): Promise<Section>
+  createSection(name: string, directory: string, provider?: string): Promise<Section>
   updateSection(id: string, updates: Partial<Section>): Promise<void>
   deleteSection(id: string): Promise<void>
   getSettings(): Promise<AppSettings>

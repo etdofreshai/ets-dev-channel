@@ -39,8 +39,8 @@ export class LiveProvider implements DataProvider {
     await api(`/conversations/${id}`, { method: 'DELETE' })
   }
 
-  async createSection(name: string, directory: string): Promise<Section> {
-    return api('/sections', { method: 'POST', body: JSON.stringify({ name, directory }) })
+  async createSection(name: string, directory: string, provider?: string): Promise<Section> {
+    return api('/sections', { method: 'POST', body: JSON.stringify({ name, directory, provider: provider || 'openclaw' }) })
   }
 
   async updateSection(id: string, updates: Partial<Section>): Promise<void> {

@@ -12,6 +12,7 @@ export interface Section {
   id: string
   name: string
   directory: string
+  provider?: string
   collapsed?: boolean
   order?: number
 }

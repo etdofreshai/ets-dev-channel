@@ -19,7 +19,7 @@ export async function getDb(): Promise<Database> {
   }
 
   db.run(`CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)`)
-  db.run(`CREATE TABLE IF NOT EXISTS sections (id TEXT PRIMARY KEY, name TEXT, directory TEXT, "order" INTEGER)`)
+  db.run(`CREATE TABLE IF NOT EXISTS sections (id TEXT PRIMARY KEY, name TEXT, directory TEXT, provider TEXT DEFAULT 'openclaw', "order" INTEGER)`)
   db.run(`CREATE TABLE IF NOT EXISTS conversations (
     id TEXT PRIMARY KEY, name TEXT, avatar TEXT, description TEXT,
     sectionId TEXT, parentId TEXT, archived BOOLEAN DEFAULT 0,

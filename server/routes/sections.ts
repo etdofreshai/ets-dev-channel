@@ -11,13 +11,15 @@ router.get('/', async (_req, res) => {
 
 router.post('/', async (req, res) => {
   const db = await getDb()
-  const { name, directory } = req.body
+  const { name, directory, provider } = req.body
+  const validProviders = ['openclaw', 'claude-code', 'etclaw']
+  const resolvedProvider = validProviders.includes(provider) ? provider : 'openclaw'
   const id = crypto.randomUUID()
   const maxRow = queryOne(db, 'SELECT MAX("order") as m FROM sections')
   const order = (maxRow?.m ?? -1) + 1
-  db.run('INSERT INTO sections (id, name, directory, "order") VALUES (?, ?, ?, ?)', [id, name, directory, order])
+  db.run('INSERT INTO sections (id, name, directory, provider, "order") VALUES (?, ?, ?, ?, ?)', [id, name, directory, resolvedProvider, order])
   save()
-  res.json({ id, name, directory, order })
+  res.json({ id, name, directory, provider: resolvedProvider, order })
 })
 
 router.patch('/:id', async (req, res) => {

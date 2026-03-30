@@ -47,8 +47,8 @@ export class MockProvider implements DataProvider {
     this.conversations = this.conversations.filter(c => c.id !== id)
   }
 
-  async createSection(name: string, directory: string): Promise<Section> {
-    const s: Section = { id: `section-${Date.now()}`, name, directory, order: this.sections.length }
+  async createSection(name: string, directory: string, provider?: string): Promise<Section> {
+    const s: Section = { id: `section-${Date.now()}`, name, directory, provider: provider || 'openclaw', order: this.sections.length }
     this.sections.push(s)
     return s
   }

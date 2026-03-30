@@ -6,16 +6,22 @@ interface Props {
   onComplete: () => void
 }
 
+const PROVIDERS = [
+  { id: 'openclaw', label: '🐙 OpenClaw', desc: 'Your main AI assistant' },
+  { id: 'claude-code', label: '💻 Claude Code', desc: 'Coding assistant' },
+  { id: 'etclaw', label: '🦞 ETClaw', desc: 'Desktop instance' },
+]
+
 export default function SetupWizard({ provider, onComplete }: Props) {
   const [workspaceDir, setWorkspaceDir] = useState('/app/data/workspace')
+  const [selectedProvider, setSelectedProvider] = useState('openclaw')
   const [saving, setSaving] = useState(false)
 
   const handleSubmit = async () => {
     if (!workspaceDir.trim()) return
     setSaving(true)
     await provider.updateSettings({ workspaceDir: workspaceDir.trim(), setupComplete: true })
-    // Create the default Workspace section
-    await provider.createSection('Workspace', workspaceDir.trim())
+    await provider.createSection('Workspace', workspaceDir.trim(), selectedProvider)
     onComplete()
   }
 
@@ -30,6 +36,28 @@ export default function SetupWizard({ provider, onComplete }: Props) {
       }}>
         <h1 style={{ margin: '0 0 8px', fontSize: 28 }}>🚀 ET's Dev Channel</h1>
         <p style={{ margin: '0 0 32px', opacity: 0.7 }}>Set up your workspace to get started</p>
+
+        <label style={{ display: 'block', textAlign: 'left', marginBottom: 8, fontSize: 14, opacity: 0.8 }}>
+          Provider
+        </label>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+          {PROVIDERS.map(p => (
+            <button
+              key={p.id}
+              onClick={() => setSelectedProvider(p.id)}
+              style={{
+                flex: 1, padding: '12px 8px', borderRadius: 8, border: '2px solid',
+                borderColor: selectedProvider === p.id ? '#e94560' : '#333',
+                background: selectedProvider === p.id ? 'rgba(233,69,96,0.15)' : '#0f3460',
+                color: '#e0e0e0', cursor: 'pointer', textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: 18 }}>{p.label}</div>
+              <div style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>{p.desc}</div>
+            </button>
+          ))}
+        </div>
+
         <label style={{ display: 'block', textAlign: 'left', marginBottom: 8, fontSize: 14, opacity: 0.8 }}>
           Workspace Directory
         </label>

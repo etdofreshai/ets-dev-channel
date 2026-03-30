@@ -71,14 +71,14 @@ export class BrowserProvider implements DataProvider {
     }))
   }
 
-  async createSection(name: string, directory: string): Promise<Section> {
+  async createSection(name: string, directory: string, provider?: string): Promise<Section> {
     const db = await this.getDb()
     const id = this.uid()
     const existing = db.exec('SELECT MAX("order") FROM sections')
     const order = (existing.length && existing[0].values[0][0] != null) ? (existing[0].values[0][0] as number) + 1 : 0
-    db.run('INSERT INTO sections (id, name, directory, "order") VALUES (?, ?, ?, ?)', [id, name, directory, order])
+    db.run('INSERT INTO sections (id, name, directory, provider, "order") VALUES (?, ?, ?, ?, ?)', [id, name, directory, provider || 'openclaw', order])
     this.save()
-    return { id, name, directory, order }
+    return { id, name, directory, provider: provider || 'openclaw', order }
   }
 
   async updateSection(id: string, updates: Partial<Section>): Promise<void> {

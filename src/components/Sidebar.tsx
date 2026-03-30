@@ -191,6 +191,17 @@ export default function Sidebar({
                       <>
                         <span className="section-name">{section.name}</span>
                         {!isCompact && <span className="section-dir">{section.directory}</span>}
+                        {!isCompact && section.provider && (
+                          <span className="section-provider" style={{
+                            fontSize: 10, opacity: 0.5, marginLeft: 4,
+                            background: section.provider === 'openclaw' ? 'rgba(233,69,96,0.2)' :
+                              section.provider === 'claude-code' ? 'rgba(100,149,237,0.2)' : 'rgba(255,165,0,0.2)',
+                            padding: '1px 6px', borderRadius: 4,
+                          }}>
+                            {section.provider === 'openclaw' ? '🐙' : section.provider === 'claude-code' ? '💻' : '🦞'}
+                            {' '}{section.provider}
+                          </span>
+                        )}
                       </>
                     )}
                   </div>
