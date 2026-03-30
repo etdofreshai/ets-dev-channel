@@ -2,15 +2,21 @@ console.log("[ets-dev-channel] module loaded");
 
 import { defineChannelPluginEntry } from "openclaw/plugin-sdk/core";
 import { dispatchInboundDirectDmWithRuntime } from "openclaw/plugin-sdk/channel-inbound";
-import { createPluginRuntimeStore } from "openclaw/plugin-sdk/runtime-store";
 import { etsDevChannelPlugin } from "./src/channel.js";
 import * as client from "./src/client.js";
 
-const store = createPluginRuntimeStore("ets-dev-channel runtime not initialized");
+let runtime: any = null;
 let currentConfig: any = null;
 let polling = false;
 let pollerStarted = false;
 let offset = 0;
+
+function tryStartPoller() {
+  if (pollerStarted || !runtime || !currentConfig) return;
+  pollerStarted = true;
+  console.log("[ets-dev-channel] starting poller (runtime + config ready)");
+  startPolling();
+}
 
 async function startPolling() {
   polling = true;
@@ -23,18 +29,11 @@ async function startPolling() {
         const msg = update.message;
         if (!msg?.text) continue;
 
-        const runtime = store.tryGetRuntime();
-        const cfg = currentConfig;
-        if (!runtime || !cfg) {
-          console.warn("[ets-dev-channel] runtime or config not ready, skipping");
-          continue;
-        }
-
         console.log(`[ets-dev-channel] received: "${msg.text}" from ${msg.from.id} in ${msg.chat.id}`);
 
         try {
           await dispatchInboundDirectDmWithRuntime({
-            cfg,
+            cfg: currentConfig,
             runtime,
             channel: "ets-dev-channel",
             channelLabel: "ET's Dev Channel",
@@ -78,21 +77,14 @@ export default defineChannelPluginEntry({
   name: "ET's Dev Channel",
   description: "Connect OpenClaw to ET's Dev Channel",
   plugin: etsDevChannelPlugin,
-  setRuntime: (runtime: any) => {
+  setRuntime: (rt: any) => {
     console.log("[ets-dev-channel] setRuntime called");
-    store.setRuntime(runtime);
+    runtime = rt;
+    tryStartPoller();
   },
   registerFull(api) {
     console.log("[ets-dev-channel] registerFull called, mode:", api.registrationMode);
     currentConfig = api.config;
-    if (!pollerStarted) {
-      pollerStarted = true;
-      setTimeout(() => {
-        console.log("[ets-dev-channel] starting poller via setTimeout");
-        startPolling();
-      }, 3000);
-    } else {
-      console.log("[ets-dev-channel] poller already started, skipping");
-    }
+    tryStartPoller();
   },
 });
