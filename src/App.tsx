@@ -16,8 +16,9 @@ export default function App() {
     const params = new URLSearchParams(window.location.search)
     const mode = params.get('data')
     if (mode === 'mock') return new MockProvider()
-    if (mode === 'live') return new LiveProvider()
-    return new BrowserProvider()
+    if (mode === 'browser') return new BrowserProvider()
+    // Default to LiveProvider (server-backed) when deployed
+    return new LiveProvider()
   }, [])
 
   const isMock = provider instanceof MockProvider
